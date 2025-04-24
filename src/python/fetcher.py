@@ -10,7 +10,6 @@ API_KEY = os.getenv('API_KEY')
 LOC_LAT = os.getenv('LOCATION_LAT')
 LOC_LNG = os.getenv('LOCATION_LNG')
 
-
 def get_places_review_number(place_id):
     res = requests.get(
         f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=user_ratings_total,geometry&key={API_KEY}")
