@@ -4,8 +4,9 @@ CREATE TABLE "Store" (
     "name" TEXT NOT NULL,
     "rating" REAL NOT NULL,
     "ratingCount" INTEGER NOT NULL,
-    "latitude" REAL NOT NULL,
-    "longitude" REAL NOT NULL,
+    "price" REAL NOT NULL,
+    "latitude" REAL,
+    "longitude" REAL,
     "distance" INTEGER NOT NULL,
     "travelTime" INTEGER NOT NULL,
     "placeId" TEXT NOT NULL
@@ -14,8 +15,14 @@ CREATE TABLE "Store" (
 -- CreateTable
 CREATE TABLE "OpeningHour" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "open" DATETIME NOT NULL,
-    "close" DATETIME NOT NULL,
+    "dayOfWeek" INTEGER NOT NULL,
+    "openHour" INTEGER NOT NULL,
+    "openMinute" INTEGER NOT NULL,
+    "closeHour" INTEGER NOT NULL,
+    "closeMinute" INTEGER NOT NULL,
     "storeId" TEXT NOT NULL,
     CONSTRAINT "OpeningHour_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Store" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Store_placeId_key" ON "Store"("placeId");

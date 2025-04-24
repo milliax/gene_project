@@ -16,14 +16,15 @@ model Store {
   name        String
   rating      Float
   ratingCount Int
+  price       Float
 
-  latitude  Float
-  longitude Float
+  latitude  Float?
+  longitude Float?
 
   distance   Int // in meters
   travelTime Int // in seconds with scooter
 
-  placeId String
+  placeId String @unique
 
   openingHours OpeningHour[]
 }
@@ -31,8 +32,12 @@ model Store {
 model OpeningHour {
   id String @id @default(cuid())
 
-  open  DateTime
-  close DateTime
+  dayOfWeek Int // 0 = Monday, 1 = Tuesday, ..., 6 = Sunday
+  
+  openHour      Int
+  openMinute    Int
+  closeHour     Int
+  closeMinute   Int
 
   storeId String
   store   Store  @relation(fields: [storeId], references: [id])
