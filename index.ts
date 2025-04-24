@@ -1,5 +1,4 @@
-import { PrismaClient } from './generated/prisma'
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma'
 
 import { getPlaces } from './src/fetcher'
 
@@ -9,6 +8,7 @@ async function main() {
     // ... you will write your Prisma Client queries here
 
     getPlaces()
+
 }
 
 main()

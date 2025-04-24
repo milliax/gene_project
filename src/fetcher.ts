@@ -1,5 +1,4 @@
-import { PrismaClient } from '../generated/prisma'
-const prisma = new PrismaClient()
+import { prisma } from "@/lib/prisma"
 
 export const getPlacesReviewNumber = async (place_id: string) => {
     const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&fields=user_ratings_total,geometry&key=${process.env.API_KEY}`)
@@ -130,7 +129,7 @@ export const getPlaces = async (lat: number = 24.784144, lng: number = 120.99633
                     const data = await res.json();
 
                     if (res.ok) {
-                        if(!data || !data.places || data.places.length === 0) {
+                        if (!data || !data.places || data.places.length === 0) {
                             continue;
                         }
 
@@ -160,10 +159,10 @@ export const getPlaces = async (lat: number = 24.784144, lng: number = 120.99633
                             const averagePrice = priceRange ? (parseInt(priceRange.startPrice.units) + parseInt(priceRange?.endPrice?.units ?? "10000")) / 2 : -1
 
                             await prisma.store.upsert({
-                                where:{
+                                where: {
                                     placeId: name.split("/")[1]
                                 },
-                                update:{},
+                                update: {},
                                 create: {
                                     name: displayName.text,
                                     rating: rating ?? -1,
