@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Store {
+  id          String @id @default(cuid())
+  name        String
+  rating      Float
+  ratingCount Int
+
+  latitude  Float
+  longitude Float
+
+  distance   Int // in meters
+  travelTime Int // in seconds with scooter
+
+  placeId String
+
+  openingHours OpeningHour[]
+}
+
+model OpeningHour {
+  id String @id @default(cuid())
+
+  open  DateTime
+  close DateTime
+
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id])
+}
