@@ -23,6 +23,29 @@ def get_db_connection():
 def get_places(conn):
     cursor = conn.cursor()
 
+#     cursor.execute("""SELECT
+#   Store.id AS store_id,
+#   Store.name,
+#   Store.rating,
+#   Store.ratingCount,
+#   Store.price,
+#   Store.latitude,
+#   Store.longitude,
+#   Store.distance,
+#   Store.travelTime,
+#   Store.placeId,
+#   Store.lastSelectedAt,
+  
+#   OpeningHour.id AS opening_hour_id,
+#   OpeningHour.dayOfWeek,
+#   OpeningHour.openHour,
+#   OpeningHour.openMinute,
+#   OpeningHour.closeHour,
+#   OpeningHour.closeMinute
+
+# FROM Store
+# LEFT JOIN OpeningHour ON OpeningHour.storeId = Store.id
+# ORDER BY Store.id, OpeningHour.dayOfWeek;""")
     cursor.execute("""SELECT
   Store.id AS store_id,
   Store.name,
@@ -34,6 +57,7 @@ def get_places(conn):
   Store.distance,
   Store.travelTime,
   Store.placeId,
+  Store.lastSelectedAt,
   
   OpeningHour.id AS opening_hour_id,
   OpeningHour.dayOfWeek,
@@ -65,6 +89,7 @@ ORDER BY Store.id, OpeningHour.dayOfWeek;""")
                 "distance": row["distance"],
                 "travelTime": row["travelTime"],
                 "placeId": row["placeId"],
+                "lastSelectedAt": row["lastSelectedAt"],
                 "openingHours": []
             }
 
@@ -80,6 +105,8 @@ ORDER BY Store.id, OpeningHour.dayOfWeek;""")
             })
 
     store_list = list(stores.values())
+
+    # print(store_list[0])
 
     return store_list
 

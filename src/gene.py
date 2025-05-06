@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 import tqdm
+import datetime
+
 
 class Gene:
     stores = []
@@ -35,17 +37,36 @@ class Gene:
         z = 0
         penalty_cnt = 0
 
+        now = datetime.datetime.now()
+
         for i, gene in enumerate(x):
 
             if gene == 1:  # If the gene is selected
                 store = self.stores[i]
 
-                z += store["rating"] * 10 - \
+                this_z = store["rating"] * 10 - \
                     store["price"] - store["distance"] / 1000
+
+                # if store has key lastSelectedAt
+                last_eaten = store.get("lastSelectedAt")
+
+                if last_eaten is not None:
+                    # Calculate the time since last eaten
+                    time_since_last_eaten = now - \
+                        datetime.datetime.fromisoformat(last_eaten)
+
+                    if (time_since_last_eaten.days < 7):
+                        z /= 2
+                    elif (time_since_last_eaten.days < 14):
+                        z /= 1.5
+                    elif (time_since_last_eaten.days < 30):
+                        z /= 1.2
 
                 # Example constraints
                 if store["rating"] < 3.0:  # Penalize low-rated stores
                     penalty_cnt += 1
+
+                z += this_z
 
         if x.sum() != 7:  # Limit to 7 selected stores
             penalty_cnt += 1
@@ -67,10 +88,10 @@ class Gene:
             # Solve the assignment problem
             row_ind, col_ind = linear_sum_assignment(cost_matrix)
 
-            total_cost = sum(cost_matrix[row][col] for row, col in zip(row_ind, col_ind))
+            total_cost = sum(cost_matrix[row][col]
+                             for row, col in zip(row_ind, col_ind))
             if total_cost >= 1e6:  # If any store couldn't be assigned to an open day
                 penalty_cnt += 1
-
 
         penalty_cost = 1e7
 
@@ -121,7 +142,7 @@ class Gene:
         return b[:self.num_chrome], list(b_fit[:self.num_chrome])
 
     def main(self):
-        
+
         # update variables
 
         # stores = stores_from_db
