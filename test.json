@@ -1,0 +1,71 @@
+{
+    "id": "cm9vr6u3g0000tb50twz2qres",
+    "name": "Shine Mood NCTU",
+    "rating": 4.4,
+    "ratingCount": 2757,
+    "price": 100.5,
+    "latitude": None,
+    "longitude": None,
+    "distance": 666,
+    "travelTime": 73,
+    "placeId": "ChIJixrR5xE2aDQRcSR1SqrnbRs",
+    "lastSelectedAt": None,
+    "openingHours": [
+        {
+            "id": "cm9vr6u3g0001tb50pdxypyj5",
+            "dayOfWeek": 0,
+            "openHour": 9,
+            "openMinute": 30,
+            "closeHour": 18,
+            "closeMinute": 30
+        },
+        {
+            "id": "cm9vr6u3g0002tb50f66mnfm1",
+            "dayOfWeek": 1,
+            "openHour": 9,
+            "openMinute": 0,
+            "closeHour": 18,
+            "closeMinute": 0
+        },
+        {
+            "id": "cm9vr6u3g0003tb50232dsg3y",
+            "dayOfWeek": 2,
+            "openHour": 9,
+            "openMinute": 0,
+            "closeHour": 19,
+            "closeMinute": 0
+        },
+        {
+            "id": "cm9vr6u3g0004tb504uo93zfk",
+            "dayOfWeek": 3,
+            "openHour": 9,
+            "openMinute": 0,
+            "closeHour": 19,
+            "closeMinute": 0
+        },
+        {
+            "id": "cm9vr6u3g0005tb503dkqamkd",
+            "dayOfWeek": 4,
+            "openHour": 9,
+            "openMinute": 0,
+            "closeHour": 19,
+            "closeMinute": 0
+        },
+        {
+            "id": "cm9vr6u3g0006tb5057lu66th",
+            "dayOfWeek": 5,
+            "openHour": 9,
+            "openMinute": 0,
+            "closeHour": 19,
+            "closeMinute": 0
+        },
+        {
+            "id": "cm9vr6u3h0007tb50y5rwvghy",
+            "dayOfWeek": 6,
+            "openHour": 9,
+            "openMinute": 30,
+            "closeHour": 18,
+            "closeMinute": 30
+        }
+    ]
+}

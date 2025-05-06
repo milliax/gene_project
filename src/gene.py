@@ -3,10 +3,14 @@ from scipy.optimize import linear_sum_assignment
 import tqdm
 import datetime
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Gene:
     stores = []
-    num_iteration = 5000
+    num_iteration = int(os.getenv("NUM_ITERATION"))
     num_chrome = 20
     num_bit = 9
 
@@ -75,15 +79,46 @@ class Gene:
             selected_stores = [self.stores[i]
                                for i in range(len(x)) if x[i] == 1]
             cost_matrix = []
+            
+            eating_time = os.getenv("EATING_TIME")
+
+            hour = int(eating_time[0:2])
+            minute = int(eating_time[3:5])
+
             for store in selected_stores:
                 row = []
+
                 for day in range(7):  # Days of the week (0-6)
-                    if any(oh["dayOfWeek"] == day for oh in store["openingHours"]):
-                        # No cost if the store is open on this day
-                        row.append(0)
+                    # find if opening hours contains the day
+
+                    index = store["openingHours"].index(
+                        next((oh for oh in store["openingHours"] if oh["dayOfWeek"] == day), None)
+                    ) if any(oh["dayOfWeek"] == day for oh in store["openingHours"]) else -1
+
+                    if index != -1:
+                        # find the opening hour
+                        oh = store["openingHours"][index]
+
+                        # Check if the eating time is within the opening hours
+                        if (oh["openHour"] < hour or (oh["openHour"] == hour and oh["openMinute"] <= minute)) and \
+                                (oh["closeHour"] > hour or (oh["closeHour"] == hour and oh["closeMinute"] >= minute)):
+                            row.append(0)
+                        else:
+                            # Eating time is outside the opening hours
+                            row.append(1e6)
                     else:
-                        row.append(1e6)  # High cost if the store is not open
+                        # Store is not open on this day
+                        row.append(1e6)
+
                 cost_matrix.append(row)
+                
+                # for day in range(7):  # Days of the week (0-6)
+                #     if any(oh["dayOfWeek"] == day for oh in store["openingHours"]):
+                #         # No cost if the store is open on this day
+                #         row.append(0)
+                #     else:
+                #         row.append(1e6)  # High cost if the store is not open
+                # cost_matrix.append(row)
 
             # Solve the assignment problem
             row_ind, col_ind = linear_sum_assignment(cost_matrix)
@@ -166,19 +201,26 @@ class Gene:
         best_outputs = [np.max(pop_fit)]
         mean_outputs = [np.average(pop_fit)]
 
-        for i in tqdm.tqdm(range(self.num_iteration)):
-            parent = self.selection(pop, pop_fit)
-            offspring = self.crossover(parent)
-            self.mutation(offspring)
-            offspring_fit = self.evaluatePop(offspring)
-            pop, pop_fit = self.replace(pop, pop_fit, offspring, offspring_fit)
+        happiness = -1
 
-            best_outputs.append(np.max(pop_fit))
-            mean_outputs.append(np.average(pop_fit))
-
-            # print("iteration %d: x = %s, y = %f, sum = %d" %
-            #       (i, pop[0], pop_fit[0], pop[0].sum()))
 
         # return the best solution
+
+        while(happiness < 0):
+            for i in tqdm.tqdm(range(self.num_iteration)):
+                parent = self.selection(pop, pop_fit)
+                offspring = self.crossover(parent)
+                self.mutation(offspring)
+                offspring_fit = self.evaluatePop(offspring)
+                pop, pop_fit = self.replace(pop, pop_fit, offspring, offspring_fit)
+
+                best_outputs.append(np.max(pop_fit))
+                mean_outputs.append(np.average(pop_fit))
+
+                # print("iteration %d: x = %s, y = %f, sum = %d" %
+                #       (i, pop[0], pop_fit[0], pop[0].sum()))
+            happiness = pop_fit[0]
+            print("happiness: ", happiness)
+
 
         return pop[0], pop_fit[0]
