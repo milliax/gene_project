@@ -6,9 +6,7 @@ import { getPlaces } from './src/fetcher'
 
 async function main() {
     // ... you will write your Prisma Client queries here
-
     getPlaces()
-
 }
 
 main()

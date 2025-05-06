@@ -12,7 +12,7 @@ load_dotenv()
 
 
 def get_db_connection():
-    url = os.getenv("DATABASE_URL_FOR_PYTHON")
+    url = os.getenv("DATABASE")
     print("database url: ", url)
     conn = sqlite3.connect(url)
     conn.row_factory = sqlite3.Row
@@ -121,6 +121,8 @@ if __name__ == "__main__":
     db = get_db_connection()
     stores = get_places(db)
     db.close()
+
+    # TODO: if this week has query, then use the query result, skip the query
 
     # gene algorithm
     ga = Gene(stores)

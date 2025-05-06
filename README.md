@@ -1,8 +1,49 @@
 # About the Code
 
-## Target
+## Code Structure
 
-BLANK
+### fetcher.ts
+
+To fetch google api results and write it into sqlite3 stored in ./database/sql.db 
+
+RUN command
+
+```bash
+bun index.ts
+```
+
+### gene.py
+
+Inside is a gene algorithm class, where the most important code is.
+
+NOT executable
+
+### main.py
+
+This is the place that handles the gene algorithm with database logic.
+
+RUN command
+
+```bash
+python ./src/main.py
+```
+
+### clear_lastSelectedAt.py
+
+To rerun the result from very beginning, you would need to reset the database, where there is the column called lastSelectedAt.
+
+RUN command
+
+```bash
+python ./src/clear_lastSelectedAt.py
+```
+
+## Stack
+
+\# Typescript
+\# Python
+\# Prisma
+\# SQLite
 
 # How to use git
 
