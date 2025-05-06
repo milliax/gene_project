@@ -57,8 +57,11 @@ class Gene:
 
                 if last_eaten is not None:
                     # Calculate the time since last eaten
-                    time_since_last_eaten = now - \
-                        datetime.datetime.fromisoformat(last_eaten)
+                    # last_eaten is in milliseconds
+                    last_eaten = datetime.datetime.fromtimestamp(
+                        last_eaten / 1000)
+                    
+                    time_since_last_eaten = now - last_eaten
 
                     if (time_since_last_eaten.days < 7):
                         z /= 2

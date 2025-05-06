@@ -1,10 +1,11 @@
 from dotenv import load_dotenv
 import os
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # from gene import main as gene_main
 from gene import Gene
+
 
 load_dotenv()
 
@@ -35,7 +36,7 @@ def get_places(conn):
 #   Store.travelTime,
 #   Store.placeId,
 #   Store.lastSelectedAt,
-  
+
 #   OpeningHour.id AS opening_hour_id,
 #   OpeningHour.dayOfWeek,
 #   OpeningHour.openHour,
@@ -160,7 +161,8 @@ if __name__ == "__main__":
 
     # write last selected store to database
 
-    now = datetime.now()
+    # add 8 hours to the last selected time
+    now = datetime.now() + timedelta(hours=8)
 
     s = [store for store in selected_stores]
     s_ids = [f"\"{store["id"]}\"" for store in s]
@@ -168,11 +170,11 @@ if __name__ == "__main__":
     db = get_db_connection()
     cursor = db.cursor()
 
-    sql = f"UPDATE Store SET lastSelectedAt = ? WHERE id IN ({", ".join(s_ids)})"
+    sql = f"UPDATE Store SET lastSelectedAt = {int(now.timestamp()*1000)} WHERE id IN ({", ".join(s_ids)})"
 
     print("sql: ", sql)
 
-    cursor.execute(sql, [now])
+    cursor.execute(sql)
 
     db.commit()
     db.close()
