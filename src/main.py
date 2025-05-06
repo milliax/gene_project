@@ -13,7 +13,7 @@ load_dotenv()
 
 def get_db_connection():
     url = os.getenv("DATABASE")
-    print("database url: ", url)
+    # print("database url: ", url)
     conn = sqlite3.connect(url)
     conn.row_factory = sqlite3.Row
 
@@ -125,10 +125,32 @@ if __name__ == "__main__":
     # TODO: if this week has query, then use the query result, skip the query
 
     # gene algorithm
-    ga = Gene(stores)
+
+    # pre set the stores
+    # 留下這個時間點有開的店
+    picked_stores = []
+
+    eating_time = os.getenv("EATING_TIME")
+
+    hour = int(eating_time[0:2])
+    minute = int(eating_time[3:5])
+
+    for store in stores:
+        to_pick = False
+        for oh in store["openingHours"]:
+            if (oh["openHour"] < hour or (oh["openHour"] == hour and oh["openMinute"] <= minute)) and \
+                    (oh["closeHour"] > hour or (oh["closeHour"] == hour and oh["closeMinute"] >= minute)):
+                to_pick = True
+                break
+        if to_pick:
+            picked_stores.append(store)
+
+    print("running genetic algorithm from {} stores".format(len(picked_stores)))
+
+    ga = Gene(picked_stores)
     selected_store, happiness = ga.main()
 
-    selected_stores = [stores[i]
+    selected_stores = [picked_stores[i]
                        for i in range(len(selected_store)) if selected_store[i] == 1]
 
     print("Selected stores:")

@@ -8,9 +8,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Gene:
     stores = []
-    num_iteration = int(os.getenv("NUM_ITERATION"))
+    num_iteration = int(os.getenv("NUMBER_OF_ITERATIONS"))
     num_chrome = 20
     num_bit = 9
 
@@ -79,7 +80,7 @@ class Gene:
             selected_stores = [self.stores[i]
                                for i in range(len(x)) if x[i] == 1]
             cost_matrix = []
-            
+
             eating_time = os.getenv("EATING_TIME")
 
             hour = int(eating_time[0:2])
@@ -92,7 +93,8 @@ class Gene:
                     # find if opening hours contains the day
 
                     index = store["openingHours"].index(
-                        next((oh for oh in store["openingHours"] if oh["dayOfWeek"] == day), None)
+                        next(
+                            (oh for oh in store["openingHours"] if oh["dayOfWeek"] == day), None)
                     ) if any(oh["dayOfWeek"] == day for oh in store["openingHours"]) else -1
 
                     if index != -1:
@@ -111,7 +113,7 @@ class Gene:
                         row.append(1e6)
 
                 cost_matrix.append(row)
-                
+
                 # for day in range(7):  # Days of the week (0-6)
                 #     if any(oh["dayOfWeek"] == day for oh in store["openingHours"]):
                 #         # No cost if the store is open on this day
@@ -126,7 +128,7 @@ class Gene:
             total_cost = sum(cost_matrix[row][col]
                              for row, col in zip(row_ind, col_ind))
             if total_cost >= 1e6:  # If any store couldn't be assigned to an open day
-                penalty_cnt += 1
+                penalty_cnt += 0.001
 
         penalty_cost = 1e7
 
@@ -203,16 +205,16 @@ class Gene:
 
         happiness = -1
 
-
         # return the best solution
 
-        while(happiness < 0):
+        while (happiness < 0):
             for i in tqdm.tqdm(range(self.num_iteration)):
                 parent = self.selection(pop, pop_fit)
                 offspring = self.crossover(parent)
                 self.mutation(offspring)
                 offspring_fit = self.evaluatePop(offspring)
-                pop, pop_fit = self.replace(pop, pop_fit, offspring, offspring_fit)
+                pop, pop_fit = self.replace(
+                    pop, pop_fit, offspring, offspring_fit)
 
                 best_outputs.append(np.max(pop_fit))
                 mean_outputs.append(np.average(pop_fit))
@@ -221,6 +223,14 @@ class Gene:
                 #       (i, pop[0], pop_fit[0], pop[0].sum()))
             happiness = pop_fit[0]
             print("happiness: ", happiness)
+            if happiness < 0:
+                # update pop with new data
+                new_pop = self.initPop()
 
+                total_len = len(pop)
+                half = int(len(pop) / 2)
+
+                pop = np.concatenate(
+                    (pop[:half], new_pop[:total_len-half]), axis=0)
 
         return pop[0], pop_fit[0]
