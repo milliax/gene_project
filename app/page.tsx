@@ -1,11 +1,17 @@
 "use client"
 
 import MapEmbed from "@/components/map";
+import clsx from "clsx";
 import { useEffect, useState } from "react";
+
+import Loading from "@/components/loading";
 
 export default function Home() {
     const [stores, setStores] = useState<any[]>([]);
     const [placeId, setPlaceId] = useState<string>("");
+
+    const [researchLoading, setResearchLoading] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
 
     const fetchStores = async () => {
         const res = await fetch('/api/get_stores');
@@ -19,6 +25,9 @@ export default function Home() {
         const data = await res.json();
         console.log(data)
         setStores(data.stores);
+        if (data.stores.length > 0) {
+            setPlaceId(data.stores[0].placeId);
+        }
     }
 
     useEffect(() => {
@@ -29,15 +38,63 @@ export default function Home() {
         <div className="bg-white h-screen flex flex-row text-black">
             <div className="w-[30rem] bg-white h-full shadow-md border-r border-gray-200">
                 <div className="flex flex-row w-full px-5 py-6 gap-3 h-18 items-center justify-center">
-                    <div className="rounded-md bg-amber-200 px-3 py-1 cursor-pointer hover:bg-amber-300 hover:scale-110 duration-300 transition-all">
+                    <div className={clsx("rounded-md bg-amber-200 px-3 py-1 hover:bg-amber-300 hover:scale-110 duration-300 transition-all relative h-8"
+                        , researchLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                        , resetLoading && "opacity-50"
+                    )} onClick={() => {
+                        if (researchLoading) return;
+                        setResearchLoading(true);
+                        fetch("/api/action", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                action: "next"
+                            })
+                        }).then((res) => {
+                            if (!res.ok) {
+                                console.log('Error fetching stores');
+                                const data = res.json();
+                                console.log(data)
+                                return;
+                            }
+                            fetchStores();
+                            setResearchLoading(false);
+                        })
+                    }}>
                         重新搜尋一下
+                        {researchLoading && <Loading className="aboslute z-50 left-0 right-0 top-0 bottom-0 m-auto" />}
                     </div>
-                    <div className="rounded-md bg-amber-200 px-3 py-1 cursor-pointer hover:bg-amber-300 hover:scale-110 duration-300 transition-all">
+                    <div className={clsx("rounded-md bg-amber-200 px-3 py-1 hover:bg-amber-300 hover:scale-110 duration-300 transition-all relative h-8"
+                        , researchLoading && "opacity-50"
+                        , resetLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                    )} onClick={() => {
+                        if (resetLoading) return;
+                        setResetLoading(true);
+                        fetch("/api/action", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                action: "reset"
+                            })
+                        }).then((res) => {
+                            if (!res.ok) {
+                                console.log('Error fetching stores');
+                                const data = res.json();
+                                console.log(data)
+                                return;
+                            }
+                            fetchStores();
+                            setResetLoading(false);
+                        })
+                    }}>
                         清除所有搜尋紀錄
+                        {resetLoading && <Loading className="absolute left-0 right-0 top-0 bottom-0 m-auto"/>}
                     </div>
                 </div>
 
                 <div className="w-full h-[calc(100vh-4.5rem)] flex flex-col items-center justify-center px-3 gap-2">
+                    {stores.length === 0 && <div className="text-gray-500 text-lg flex flex-col items-center justify-center">
+                        <span>目前沒有任何推薦</span>
+                        <span>點一下上面的搜尋一下</span>
+                    </div>}
                     {stores.map((s, index) => (
                         <PlacesCard key={s.id}
                             name={s.name}
@@ -56,9 +113,11 @@ export default function Home() {
             </div>
             <div className="bg-slate-100 w-[calc(100vw-30rem)] h-full flex flex-col items-center justify-center">
                 {placeId}
-                <MapEmbed
-                    placeId={placeId} />
+                {placeId.length > 0 && <MapEmbed
+                    placeId={placeId}
+                />}
             </div>
+            {/* <Loading /> */}
         </div>
     );
 }

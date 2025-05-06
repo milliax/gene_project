@@ -29,13 +29,6 @@ export const GET = async (req: NextRequest) => {
         }
     })
 
-    if (stores.length === 0) {
-        return NextResponse.json({ message: 'No stores found' }, { status: 500 })
-    }
-
-    // 最後
-
-
     // TODO: Assign for the days
     // retrun first 7 solution
 
