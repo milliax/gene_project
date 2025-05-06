@@ -2,43 +2,45 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/prisma"
+    provider = "prisma-client-js"
+    output   = "./generated/prisma"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
 }
 
 model Store {
-  id          String @id @default(cuid())
-  name        String
-  rating      Float
-  ratingCount Int
-  price       Float
+    id          String @id @default(cuid())
+    name        String
+    rating      Float
+    ratingCount Int
+    price       Float
 
-  latitude  Float?
-  longitude Float?
+    latitude  Float?
+    longitude Float?
 
-  distance   Int // in meters
-  travelTime Int // in seconds with scooter
+    distance   Int // in meters
+    travelTime Int // in seconds with scooter
 
-  placeId String @unique
+    placeId String @unique
 
-  openingHours OpeningHour[]
+    lastSelectedAt DateTime?
+
+    openingHours OpeningHour[]
 }
 
 model OpeningHour {
-  id String @id @default(cuid())
+    id String @id @default(cuid())
 
-  dayOfWeek Int // 0 = Monday, 1 = Tuesday, ..., 6 = Sunday
-  
-  openHour      Int
-  openMinute    Int
-  closeHour     Int
-  closeMinute   Int
+    dayOfWeek Int // 0 = Monday, 1 = Tuesday, ..., 6 = Sunday
 
-  storeId String
-  store   Store  @relation(fields: [storeId], references: [id])
+    openHour    Int
+    openMinute  Int
+    closeHour   Int
+    closeMinute Int
+
+    storeId String
+    store   Store  @relation(fields: [storeId], references: [id])
 }
