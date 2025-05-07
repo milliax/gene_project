@@ -49,6 +49,7 @@ class Gene:
             if gene == 1:  # If the gene is selected
                 store = self.stores[i]
 
+                # TODO: 更新爽度
                 this_z = store["rating"] * 10 - \
                     store["price"] - store["distance"] / 1000
 

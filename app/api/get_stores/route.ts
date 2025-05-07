@@ -29,8 +29,10 @@ export const GET = async (req: NextRequest) => {
         }
     })
 
-    // TODO: Assign for the days
+    // TODO: 依照有沒有開店顯示星期幾
     // retrun first 7 solution
+
+
 
     return NextResponse.json({ stores: stores.slice(0, 7) }, { status: 200 })
 }

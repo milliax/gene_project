@@ -123,8 +123,6 @@ if __name__ == "__main__":
     stores = get_places(db)
     db.close()
 
-    # TODO: if this week has query, then use the query result, skip the query
-
     # gene algorithm
 
     # pre set the stores

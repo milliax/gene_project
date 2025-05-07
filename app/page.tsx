@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 
 import Loading from "@/components/loading";
+import { FaRegStar } from "react-icons/fa";
 
 export default function Home() {
     const [stores, setStores] = useState<any[]>([]);
@@ -86,7 +87,7 @@ export default function Home() {
                         })
                     }}>
                         清除所有搜尋紀錄
-                        {resetLoading && <Loading className="absolute left-0 right-0 top-0 bottom-0 m-auto"/>}
+                        {resetLoading && <Loading className="absolute left-0 right-0 top-0 bottom-0 m-auto" />}
                     </div>
                 </div>
 
@@ -146,11 +147,11 @@ function PlacesCard({
             <div className="flex flex-col w-full h-full justify-center">
                 <div className="text-lg font-bold">{props.name}</div>
                 <div className="text-sm text-gray-500 flex flex-row gap-3">
-                    <div>{props.rating}</div>
+                    <div className="flex flex-row gap-1 items-center"><FaRegStar />{props.rating}</div>
                     <div>{props.ratingCount}則評論</div>
-                    <div>{props.price}元</div>
-                    <div>{props.distance}公里</div>
-                    <div>{props.travelTime}分鐘</div>
+                    <div>{props.price === -1 ? "無價格資訊" : `${props.price}元`}</div>
+                    <div>{props.distance}公尺</div>
+                    <div>{Math.ceil(props.travelTime / 60)}分鐘</div>
                 </div>
             </div>
         </div>
