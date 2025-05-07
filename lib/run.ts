@@ -5,7 +5,7 @@ export async function runPython(path: string): Promise<void> {
     return new Promise((resolve, reject) => {
         // print directory
         console.log('Current directory:', process.cwd());
-        const py = spawn('python3', [path]);
+        const py = spawn('python', [path]);
 
         py.on('error', (err) => reject(err));
 

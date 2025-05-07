@@ -137,10 +137,10 @@ function PlacesCard({
     setPlaceId: (placeId: string) => void
 }) {
     return (
-        <div className="w-full h-28 bg-slate-50  shadow-md border-b border-gray-200 flex flex-row items-center px-5 gap-3 cursor-pointer select-none" onClick={() => {
+        <div className="w-full h-20 bg-slate-50  shadow-md border-b border-gray-200 flex flex-row items-center px-5 gap-3 cursor-pointer select-none" onClick={() => {
             props.setPlaceId(props.placeId)
         }}>
-            <div className="w-24 h-24 rounded-md flex flex-col items-center justify-center bg-slate-200 text-4xl font-bold text-gray-500">
+            <div className="w-24 h-18 rounded-md flex flex-col items-center justify-center bg-slate-200 text-4xl font-bold text-gray-500">
                 {WeekInChinese[props.index]}
             </div>
             <div className="flex flex-col w-full h-full justify-center">
