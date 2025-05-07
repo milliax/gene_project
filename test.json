@@ -4,12 +4,12 @@
     "rating": 4.4,
     "ratingCount": 2757,
     "price": 100.5,
-    "latitude": None,
-    "longitude": None,
+    "latitude": null,
+    "longitude": null,
     "distance": 666,
     "travelTime": 73,
     "placeId": "ChIJixrR5xE2aDQRcSR1SqrnbRs",
-    "lastSelectedAt": None,
+    "lastSelectedAt": null,
     "openingHours": [
         {
             "id": "cm9vr6u3g0001tb50pdxypyj5",

@@ -47,30 +47,6 @@ export const getPlacesRoutingExpenses = async (place_id: string) => {
     return data
 }
 
-export const getPlace = async (lat: number, lng: number) => {
-    const res = await fetch("https://places.googleapis.com/v1/places:searchNearby", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Goog-Api-Key': process.env.API_KEY || "",
-            "X-Goog-FieldMask": "places.name,places.displayName,places.priceRange,places.rating,places.regularOpeningHours"
-        },
-        body: JSON.stringify({
-            "includedTypes": ["restaurant"],
-            "locationRestriction": {
-                "circle": {
-                    "center": {
-                        "latitude": lat,
-                        "longitude": lng
-                    },
-                    "radius": 1000.0 // in meters
-                }
-            },
-            "maxResultCount": 20,
-        })
-    })
-}
-
 export const getPlaces = async (lat: number = 24.784144, lng: number = 120.996336) => {
     // 1度經度 ≈ 111.32 × 0.9205 ≈ 102.47 公里, 23°N
     // 1度緯度 ≈ 111.13 公里
@@ -94,14 +70,30 @@ export const getPlaces = async (lat: number = 24.784144, lng: number = 120.99633
     ];
 
     try {
+        const start_idx = 0
+        const end_idx = 1600
+        // const start_idx = 201
+        // const end_idx = 1600
 
-        while (currentStep <= 200) { // 最多走200步
+        const radius = 300 // in meters
+
+        let continueFlag = true
+
+        while(continueFlag) { // 最多走200步
             for (let i = 0; i < 2; i++) { // 每兩個方向一組（例如右→上）
                 const [dx, dy] = directions[directionIndex % 4];
                 for (let j = 0; j < steps; j++) {
                     x += dx;
                     y += dy;
                     currentStep++;
+
+                    if(currentStep < start_idx){
+                        continue
+                    }
+                    if (currentStep > end_idx) {
+                        continueFlag = false
+                        break;
+                    }
 
                     // console.log(`Step ${currentStep}: (${dx}, ${dy})`);
                     // fetch place
@@ -117,10 +109,10 @@ export const getPlaces = async (lat: number = 24.784144, lng: number = 120.99633
                             "locationRestriction": {
                                 "circle": {
                                     "center": {
-                                        "latitude": lat + (y / 111.13) * Math.sqrt(2) / 4,
-                                        "longitude": lng + (x / 102.47) * Math.sqrt(2) / 4,
+                                        "latitude": lat + (y / 111.13) * Math.sqrt(2) * radius / 2000,
+                                        "longitude": lng + (x / 102.47) * Math.sqrt(2) * radius / 2000,
                                     },
-                                    "radius": 500.0 // in meters
+                                    "radius": radius // in meters
                                 }
                             },
                             "maxResultCount": 20,
@@ -196,6 +188,7 @@ export const getPlaces = async (lat: number = 24.784144, lng: number = 120.99633
                 directionIndex++; // 換下一個方向
             }
             steps++; // 兩個方向後，步數加1
+            console.log(`Step ${steps}, currentStep: ${currentStep}, x: ${x}, y: ${y}, directionIndex: ${directionIndex}`);
         }
     } catch (error) {
         console.log("Error: ", error)
