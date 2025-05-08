@@ -2,12 +2,12 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 import tqdm
 import datetime
+# import matplotlib.pyplot
 
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 class Gene:
     stores = []
@@ -72,8 +72,8 @@ class Gene:
                         z /= 1.2
 
                 # Example constraints
-                if store["rating"] < 3.0:  # Penalize low-rated stores
-                    penalty_cnt += 1
+                # if store["rating"] < 3.0:  # Penalize low-rated stores
+                #     penalty_cnt += 1
 
                 z += this_z
 
@@ -236,5 +236,13 @@ class Gene:
 
                 pop = np.concatenate(
                     (pop[:half], new_pop[:total_len-half]), axis=0)
+
+        # plot the result
+
+        # matplotlib.pyplot.plot(best_outputs)
+        # matplotlib.pyplot.plot(mean_outputs)
+        # matplotlib.pyplot.xlabel("Iteration")
+        # matplotlib.pyplot.ylabel("Fitness")
+        # matplotlib.pyplot.show()
 
         return pop[0], pop_fit[0]
