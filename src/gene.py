@@ -67,8 +67,8 @@ class Gene:
                 if modified_params["rating"] == -1:
                     modified_params["rating"] = 2
 
-                if modified_params["comment_cnt"] == -1:
-                    modified_params["comment_cnt"] = 0
+                if modified_params["comment_cnt"] == -1 or modified_params["comment_cnt"] == 0:
+                    modified_params["comment_cnt"] = 1 + 1e-10
 
                 modified_params["comment_cnt"] = min(
                     modified_params["comment_cnt"], 1000)

@@ -32,8 +32,11 @@ export const GET = async (req: NextRequest) => {
         }, take: 7
     })
 
-    // TODO: 依照有沒有開店顯示星期幾
-    // retrun first 7 solution
+    if (!stores || stores.length === 0) {
+        return NextResponse.json({
+            stores: [],
+        })
+    }
 
     let costMatrix: number[][] = []
 
@@ -45,7 +48,6 @@ export const GET = async (req: NextRequest) => {
     console.log("hour", hour)
     console.log("minute", minute)
     try {
-
         stores.forEach((store) => {
             const costRow: number[] = []
             console.log("store", store.name)
@@ -77,6 +79,7 @@ export const GET = async (req: NextRequest) => {
             costMatrix.push(costRow)
         })
 
+        console.log("costMatrix", costMatrix)
         const result = munkres(costMatrix)
 
         // console.log("costMatrix")

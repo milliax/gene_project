@@ -6,11 +6,9 @@ from datetime import datetime, timedelta
 # from gene import main as gene_main
 from gene import Gene
 
-
 load_dotenv()
 
-# read database connection string from environment variable
-
+# read database connection string from environment variable\
 
 def get_db_connection():
     url = os.getenv("DATABASE")
