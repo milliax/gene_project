@@ -3,11 +3,12 @@ from scipy.optimize import linear_sum_assignment
 import tqdm
 import datetime
 # import matplotlib.pyplot
-
+import math
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
 
 class Gene:
     stores = []
@@ -50,8 +51,38 @@ class Gene:
                 store = self.stores[i]
 
                 # TODO: 更新爽度
-                this_z = store["rating"] * 10 - \
-                    store["price"] - store["distance"] / 1000
+                # this_z = store["rating"] * 10 - \
+                #     store["price"] - store["distance"] / 1000
+
+                modified_params = {
+                    "rating": store["rating"],
+                    "price": store["price"],
+                    "comment_cnt": store["ratingCount"],
+                    "travel_time": store["travelTime"],
+                }
+
+                if modified_params["price"] == -1:
+                    modified_params["price"] = 800
+
+                if modified_params["rating"] == -1:
+                    modified_params["rating"] = 2
+
+                if modified_params["comment_cnt"] == -1:
+                    modified_params["comment_cnt"] = 0
+
+                modified_params["comment_cnt"] = min(
+                    modified_params["comment_cnt"], 1000)
+
+                if modified_params["travel_time"]/60 > 15:
+                    modified_params["travel_time"] = 30 * 60
+
+                this_z = modified_params["rating"] * math.log10(modified_params["comment_cnt"]) * 2 \
+                    + (3-math.log10(modified_params["price"] / 3)) * 10 / 3 \
+                    + modified_params["travel_time"] / 60 / 3
+
+                this_z *= 2
+
+                # this_z max = 100
 
                 # if store has key lastSelectedAt
                 last_eaten = store.get("lastSelectedAt")
@@ -61,7 +92,7 @@ class Gene:
                     # last_eaten is in milliseconds
                     last_eaten = datetime.datetime.fromtimestamp(
                         last_eaten / 1000)
-                    
+
                     time_since_last_eaten = now - last_eaten
 
                     if (time_since_last_eaten.days < 7):
