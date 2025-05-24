@@ -130,7 +130,10 @@ if __name__ == "__main__":
     eating_time = os.getenv("EATING_TIME")
 
     hour = int(eating_time[0:2])
-    minute = int(eating_time[3:5])
+    minute = int(eating_time[2:4])
+
+    print("hour: ", hour)
+    print("minute: ", minute)
 
     for store in stores:
         to_pick = False

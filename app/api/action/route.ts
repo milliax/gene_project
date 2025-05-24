@@ -18,11 +18,15 @@ export const POST = async (req: NextRequest) => {
 
     const { action } = parsedBody.data;
 
+    
     try {
         if (action === 'next') {
             await runPython('./src/main.py');
         } else if (action === 'reset') {
-            await runPython('./src/clear_lastSelectedAt.py');
+            // get query parameters
+            const query = req.nextUrl.searchParams;
+            console.log('query', query);
+            await runPython(`./src/clear_lastSelectedAt.py ${query.get('budget') || ''}`);
         }
 
         return NextResponse.json({ message: 'OK' }, { status: 200 })
