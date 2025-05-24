@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 # from gene import main as gene_main
 from gene import Gene
-
+import sys
 load_dotenv()
 
 # read database connection string from environment variable\
@@ -144,7 +144,13 @@ if __name__ == "__main__":
 
     print("running genetic algorithm from {} stores".format(len(picked_stores)))
 
-    ga = Gene(picked_stores)
+    # weekly_budget = float(input("Enter your weekly budget : "))
+    # weekly_movetime = float(input("Enter your weekly movetime (mins): "))
+    
+    weekly_budget = float(sys.argv[1]) if len(sys.argv) > 1 else float(os.getenv("WEEKLY_BUDGET"))
+    weekly_movetime = float(sys.argv[2]) if len(sys.argv) > 2 else float(os.getenv("WEEKLY_MOVETIME"))
+
+    ga = Gene(picked_stores, weekly_budget, weekly_movetime)
     selected_store, happiness = ga.main()
 
     selected_stores = [picked_stores[i]
