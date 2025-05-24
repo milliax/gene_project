@@ -17,7 +17,7 @@ export default function Home() {
     const [researchLoading, setResearchLoading] = useState(false);
     const [resetLoading, setResetLoading] = useState(false);
 
-    const budgetValue = useRef<number>(5);
+    const budgetValue = useRef<number>(0);
 
     const fetchStores = async () => {
         const res = await fetch('/api/get_stores');
@@ -50,15 +50,15 @@ export default function Home() {
                         , resetLoading && "opacity-50"
                     )} onClick={() => {
                         if (researchLoading) return;
-                        if (budgetValue.current === 0) {
-                            Swal.fire({
-                                title: "預算為0",
-                                text: "請設定預算上限，否則無法搜尋到任何店家",
-                                icon: "warning",
-                                confirmButtonText: "吃屎比較便宜",
-                            })
-                            return;
-                        }
+                        // if (budgetValue.current === 0) {
+                        //     Swal.fire({
+                        //         title: "預算為0",
+                        //         text: "",
+                        //         icon: "warning",
+                        //         confirmButtonText: "知道了",
+                        //     })
+                        //     return;
+                        // }
                         setResearchLoading(true);
                         fetch("/api/action?budget=" + budgetValue.current, {
                             method: "POST",
@@ -110,7 +110,7 @@ export default function Home() {
                 </div>
                 <div className="w-full h-12 justify-center items-center flex flex-row gap-3 px-5 relative">
                     <Slider defaultValue={[budgetValue.current]}
-                        max={5}
+                        max={10}
                         step={1}
                         onValueChange={(value) => {
                             budgetValue.current = value[0];

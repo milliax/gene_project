@@ -7,7 +7,10 @@ export async function runPython(path: string): Promise<void> {
         console.log('Current directory:', process.cwd());
         const py = spawn('python', [path]);
 
-        py.on('error', (err) => reject(err));
+        py.on('error', (err) => {
+            console.error('Failed to start subprocess:', err);
+            reject(err)
+        });
 
         py.on('close', (code) => {
             if (code === 0) {
