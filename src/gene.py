@@ -98,11 +98,11 @@ class Gene:
                     time_since_last_eaten = now - last_eaten
 
                     if (time_since_last_eaten.days < 7):
-                        z /= 2
+                        this_z /= 2
                     elif (time_since_last_eaten.days < 14):
-                        z /= 1.5
+                        this_z /= 1.5
                     elif (time_since_last_eaten.days < 30):
-                        z /= 1.2
+                        this_z /= 1.2
 
                 # Example constraints
                 # if store["rating"] < 3.0:  # Penalize low-rated stores

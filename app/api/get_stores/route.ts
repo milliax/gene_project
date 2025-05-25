@@ -16,8 +16,8 @@ export const GET = async (req: NextRequest) => {
         startOfThisWeek.getMonth(),
         startOfThisWeek.getDate() + 8);
 
-    console.log('startOfThisWeek', startOfThisWeek)
-    console.log('endOfThisWeek', endOfThisWeek)
+    // console.log('startOfThisWeek', startOfThisWeek)
+    // console.log('endOfThisWeek', endOfThisWeek)
 
     const stores = await prisma.store.findMany({
         where: {
@@ -45,12 +45,12 @@ export const GET = async (req: NextRequest) => {
     const minute = parseInt(selected_time?.slice(3, 5) || '0')
 
 
-    console.log("hour", hour)
-    console.log("minute", minute)
+    // console.log("hour", hour)
+    // console.log("minute", minute)
     try {
         stores.forEach((store) => {
             const costRow: number[] = []
-            console.log("store", store.name)
+            // console.log("store", store.name)
 
             for (let i = 0; i < 7; i++) {
                 // iterate over the days of the week
@@ -79,7 +79,7 @@ export const GET = async (req: NextRequest) => {
             costMatrix.push(costRow)
         })
 
-        console.log("costMatrix", costMatrix)
+        // console.log("costMatrix", costMatrix)
         const result = munkres(costMatrix)
 
         // console.log("costMatrix")
@@ -94,8 +94,8 @@ export const GET = async (req: NextRequest) => {
         }).reduce((acc, curr) => (acc + curr), 0)
 
         const orderedStore = stores.map((_data, index) => (stores[orderInday[index]]))
-        console.log(stores.length, " stores")
-        console.log("orderedStore", orderedStore)
+        // console.log(stores.length, " stores")
+        // console.log("orderedStore", orderedStore)
 
         return NextResponse.json({
             stores: orderedStore,
