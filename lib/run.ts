@@ -7,7 +7,15 @@ export async function runPython(path: string, arg?: string): Promise<void> {
 
         console.log("path", path, arg);
 
-        const py = spawn('python', [path]);
+        let py = null;
+
+        // const py = spawn('python', [path,]);
+
+        if(arg){
+            py = spawn('python', [path, arg]);
+        }else{
+            py = spawn('python', [path]);
+        }
 
         py.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);

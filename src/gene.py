@@ -27,7 +27,7 @@ class Gene:
 
     np.random.seed(0)
 
-    def __init__(self, stores_from_db , weekly_budget, weekly_movetime):
+    def __init__(self, stores_from_db, weekly_budget, weekly_movetime):
         self.stores = stores_from_db
         self.num_bit = len(stores_from_db)
         self.weekly_budget = weekly_budget
@@ -116,16 +116,24 @@ class Gene:
             # calculate the possibility of the selected stores
             selected_stores = [self.stores[i]
                                for i in range(len(x)) if x[i] == 1]
-            
-            # check if the selected stores are within the budget
-            total_price = sum(store["price"] if store["price"] != -1 else 800 for store in selected_stores)
-            if total_price > self.weekly_budget:
-                penalty_cnt += 0.00001
 
-            total_movetime = sum(store["travelTime"] for store in selected_stores)/60
+            # check if the selected stores are within the budget
+            total_price = sum(store["price"] if store["price"]
+                              != -1 else 800 for store in selected_stores)
+
+            if abs(total_price - self.weekly_budget) > 1500:
+                penalty_cnt += 0.001
+            elif abs(total_price - self.weekly_budget) > 1000:
+                penalty_cnt += 0.0005
+            elif abs(total_price - self.weekly_budget) > 500:
+                penalty_cnt += 0.0001
+
+            total_movetime = sum(store["travelTime"]
+                                 for store in selected_stores)/60
+
             if total_movetime > self.weekly_movetime:
-                penalty_cnt += 0.00001
-                
+                penalty_cnt += 0.0001
+
             cost_matrix = []
 
             eating_time = os.getenv("EATING_TIME")

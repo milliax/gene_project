@@ -150,8 +150,13 @@ if __name__ == "__main__":
     # weekly_budget = float(input("Enter your weekly budget : "))
     # weekly_movetime = float(input("Enter your weekly movetime (mins): "))
     
+    print("weekly budget from argv: ", sys.argv)
+
     weekly_budget = float(sys.argv[1]) if len(sys.argv) > 1 else float(os.getenv("WEEKLY_BUDGET"))
     weekly_movetime = float(sys.argv[2]) if len(sys.argv) > 2 else float(os.getenv("WEEKLY_MOVETIME"))
+
+    print("weekly budget: ", weekly_budget)
+    print("weekly movetime: ", weekly_movetime)
 
     ga = Gene(picked_stores, weekly_budget, weekly_movetime)
     selected_store, happiness = ga.main()

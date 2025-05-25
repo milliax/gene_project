@@ -77,7 +77,7 @@ export default function Home() {
                         })
                     }}>
                         重新搜尋一下
-                        {researchLoading && <Loading className="aboslute z-50 left-0 right-0 top-0 bottom-0 m-auto" />}
+                        {researchLoading && <Loading className="aboslute z-50" />}
                     </div>
                     <div className={clsx("rounded-md bg-amber-200 px-3 py-1 hover:bg-amber-300 hover:scale-110 duration-300 transition-all relative h-8"
                         , researchLoading && "opacity-50"
@@ -102,7 +102,7 @@ export default function Home() {
                         })
                     }}>
                         清除所有搜尋紀錄
-                        {resetLoading && <Loading className="absolute left-0 right-0 top-0 bottom-0 m-auto" />}
+                        {resetLoading && <Loading className="absolute m-auto" />}
                     </div>
                 </div>
                 <div className="mb-3 px-3 text-center">
@@ -190,7 +190,7 @@ function PlacesCard({
             </div>
             <div className="flex flex-col w-full h-full justify-center">
                 <div className="text-lg font-bold">{props.name.slice(0,30)}{props.name.length > 30 && "..."}</div>
-                <div className="text-sm text-gray-500 flex flex-row gap-3">
+                <div className="text-sm text-gray-500 flex flex-wrap gap-1">
                     <div className="flex flex-row gap-1 items-center"><FaRegStar />{props.rating}</div>
                     <div>{props.ratingCount}則評論</div>
                     <div>{props.price === -1 ? "無價格資訊" : `${props.price}元`}</div>

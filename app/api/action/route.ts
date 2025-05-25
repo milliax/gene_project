@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest) => {
                 '7': 3500,
                 '8': 4000,
                 '9': 4500,
-                '10': 10000000000,
+                '10': 20000,
             }
 
             // @ts-ignore'

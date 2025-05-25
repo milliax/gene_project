@@ -79,15 +79,15 @@ export const getPlaces = async (lat: number = 24.784144, lng: number = 120.99633
 
         let continueFlag = true
 
-        while(continueFlag) { // 最多走200步
+        while (continueFlag) { // 最多走200步
             for (let i = 0; i < 2; i++) { // 每兩個方向一組（例如右→上）
                 const [dx, dy] = directions[directionIndex % 4];
+
                 for (let j = 0; j < steps; j++) {
-                    x += dx;
-                    y += dy;
+                    x += dx; y += dy;
                     currentStep++;
 
-                    if(currentStep < start_idx){
+                    if (currentStep < start_idx) {
                         continue
                     }
                     if (currentStep > end_idx) {
@@ -95,8 +95,6 @@ export const getPlaces = async (lat: number = 24.784144, lng: number = 120.99633
                         break;
                     }
 
-                    // console.log(`Step ${currentStep}: (${dx}, ${dy})`);
-                    // fetch place
                     const res = await fetch("https://places.googleapis.com/v1/places:searchNearby", {
                         method: "POST",
                         headers: {
