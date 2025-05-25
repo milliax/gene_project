@@ -18,15 +18,18 @@ export const POST = async (req: NextRequest) => {
 
     const { action } = parsedBody.data;
 
-    
     try {
         if (action === 'next') {
-            await runPython('./src/main.py');
-        } else if (action === 'reset') {
-            // get query parameters
             const query = req.nextUrl.searchParams;
             console.log('query', query);
-            await runPython(`./src/clear_lastSelectedAt.py ${query.get('budget') || ''}`);
+            const budget = query.get(`budget`);
+
+            console.log('budget', budget);
+
+            await runPython(`src/main.py`, `budget=${budget || 0}`);
+        } else if (action === 'reset') {
+            // get query parameters
+            await runPython(`src/clear_lastSelectedAt.py`);
         }
 
         return NextResponse.json({ message: 'OK' }, { status: 200 })
