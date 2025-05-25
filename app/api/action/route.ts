@@ -46,7 +46,7 @@ export const POST = async (req: NextRequest) => {
 
             console.log('Budget value:', budgetValue);
 
-            await runPython(`./src/main.py ${budget === "0" ? "" : budgetValue}`);
+            await runPython(`./src/main.py`, budget === "0" ? "" : budgetValue);
         } else if (action === 'reset') {
             // get query parameters
             await runPython(`./src/clear_lastSelectedAt.py`);
