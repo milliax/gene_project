@@ -13,6 +13,8 @@ load_dotenv()
 def get_db_connection():
     url = os.getenv("DATABASE")
     # print("database url: ", url)
+    if not url:
+        raise ValueError("DATABASE environment variable is not set.")
     conn = sqlite3.connect(url)
     conn.row_factory = sqlite3.Row
 
@@ -129,6 +131,10 @@ if __name__ == "__main__":
 
     eating_time = os.getenv("EATING_TIME")
 
+    if eating_time is None:
+        print("EATING_TIME environment variable is not set.")
+        sys.exit(1)
+
     hour = int(eating_time[0:2])
     minute = int(eating_time[2:4])
 
@@ -152,8 +158,19 @@ if __name__ == "__main__":
     
     print("weekly budget from argv: ", sys.argv)
 
-    weekly_budget = float(sys.argv[1]) if len(sys.argv) > 1 else float(os.getenv("WEEKLY_BUDGET"))
-    weekly_movetime = float(sys.argv[2]) if len(sys.argv) > 2 else float(os.getenv("WEEKLY_MOVETIME"))
+    temp_budget = os.getenv("WEEKLY_BUDGET") 
+    temp_movetime = os.getenv("WEEKLY_MOVETIME")
+
+    weekly_budget = 0
+    weekly_movetime = 0
+
+    if temp_budget is None or temp_movetime is None:
+        print("WEEKLY_BUDGET or WEEKLY_MOVETIME not set in environment variables.")
+        sys.exit(1)
+    else:
+        weekly_budget = float(sys.argv[1]) if len(sys.argv) > 1 else float(temp_budget)
+        weekly_movetime = float(sys.argv[2]) if len(sys.argv) > 2 else float(temp_movetime)
+        
 
     print("weekly budget: ", weekly_budget)
     print("weekly movetime: ", weekly_movetime)
@@ -175,7 +192,7 @@ if __name__ == "__main__":
     now = datetime.now() + timedelta(hours=8)
 
     s = [store for store in selected_stores]
-    s_ids = [f"\"{store["id"]}\"" for store in s]
+    s_ids = [f"\"{store['id']}\"" for store in s]
 
     db = get_db_connection()
     cursor = db.cursor()

@@ -12,7 +12,8 @@ load_dotenv()
 
 class Gene:
     stores = []
-    num_iteration = int(os.getenv("NUMBER_OF_ITERATIONS"))
+    temp_number_of_iteration = os.getenv("NUMBER_OF_ITERATIONS", "50")
+    num_iteration = int(temp_number_of_iteration)
     num_chrome = 20
     num_bit = 9
 
@@ -137,6 +138,10 @@ class Gene:
             cost_matrix = []
 
             eating_time = os.getenv("EATING_TIME")
+
+            if eating_time is None:
+                print("EATING_TIME environment variable is not set.")
+                return -1e6
 
             hour = int(eating_time[0:2])
             minute = int(eating_time[3:5])

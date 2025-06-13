@@ -7,7 +7,12 @@ load_dotenv()
 if __name__ == "__main__":
 
     # 連接到 SQLite 資料庫
-    conn = sqlite3.connect(os.getenv("DATABASE"))
+    db = os.getenv("DATABASE")
+
+    if not db:
+        raise ValueError("DATABASE environment variable is not set.")
+
+    conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
     # 更新 lastSelectedAt 欄位為 NULL
